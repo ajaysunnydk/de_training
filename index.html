@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Month 1 · Big Data Roadmap · Ajay Sunny</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg:      #0D0F1A;
+    --card:    #161926;
+    --card2:   #1E2235;
+    --card3:   #252840;
+    --white:   #F0F2FF;
+    --grey-l:  #A0A8C8;
+    --grey-m:  #5A6080;
+    --grey-d:  #2E3250;
+    --w1:      #7C6FFF;
+    --w2:      #00D4AA;
+    --w3:      #FF6B8A;
+    --w4:      #FF9F43;
+    --gold:    #FFD060;
+    --h4:      #FF6B8A;
+    --h3:      #00D4AA;
+    --rest:    #5A6080;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── TOP HEADER ─────────────────────── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--card);
+    border-bottom: 2px solid var(--w1);
+    padding: 10px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .site-header h1 { font-size: 17px; font-weight: 800; color: var(--white); }
+  .site-header span { font-size: 12px; color: var(--grey-l); }
+  .header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .overall-badge {
+    background: var(--card2);
+    border: 1px solid var(--grey-d);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .overall-badge span { color: var(--w1); }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--grey-m);
+    color: var(--grey-l);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all .2s;
+  }
+  .reset-btn:hover { border-color: var(--w3); color: var(--w3); }
+
+  /* ── MAIN LAYOUT ─────────────────────── */
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── OVERVIEW CARDS ─────────────────────── */
+  .overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .ov-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-top: 3px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+  .ov-card::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 80px; height: 80px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: .06;
+  }
+  .ov-label { font-size: 11px; font-weight: 600; color: var(--grey-l); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .ov-week-name { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .ov-theme { font-size: 11px; color: var(--grey-l); margin-bottom: 12px; line-height: 1.4; }
+  .ov-bar-bg { background: var(--grey-d); border-radius: 4px; height: 5px; }
+  .ov-bar { height: 5px; border-radius: 4px; background: var(--accent); transition: width .5s ease; }
+  .ov-pct { font-size: 11px; color: var(--grey-m); margin-top: 5px; }
+
+  /* ── CERT STRIP ─────────────────────── */
+  .cert-strip {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 22px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 4px solid var(--gold);
+  }
+  .cert-star { font-size: 20px; }
+  .cert-text { font-size: 12px; color: var(--grey-l); }
+  .cert-text strong { color: var(--gold); }
+
+  /* ── WEEK SECTION ─────────────────────── */
+  .week-section { margin-bottom: 48px; }
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .week-pill {
+    background: var(--accent);
+    color: #0D0F1A;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: .05em;
+  }
+  .week-title { font-size: 16px; font-weight: 700; color: var(--white); }
+  .week-progress-text { margin-left: auto; font-size: 12px; color: var(--grey-m); font-weight: 600; }
+  .week-progress-text span { color: var(--accent); }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── DAY CARD ─────────────────────── */
+  .day-card {
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--grey-d);
+    transition: border-color .2s, transform .15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .day-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .day-card.complete { border-color: var(--accent); opacity: .85; }
+  .day-card.rest-card { border-color: var(--rest); opacity: .75; }
+
+  .day-card-top {
+    background: var(--accent);
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rest-card .day-card-top { background: var(--rest); }
+  .day-num { font-size: 11px; font-weight: 800; color: #0D0F1A; letter-spacing: .05em; }
+  .day-hrs-badge {
+    background: rgba(0,0,0,.25);
+    color: #0D0F1A;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+  .complete-tick {
+    background: rgba(0,0,0,.25);
+    color: #0D0F1A;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .day-card-body { padding: 13px 14px; flex: 1; display: flex; flex-direction: column; }
+  .day-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .day-focus {
+    font-size: 11px;
+    color: var(--grey-l);
+    font-style: italic;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--grey-d);
+    line-height: 1.45;
+  }
+
+  .tasks-list { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+
+  .task-item {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 7px;
+    transition: background .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .task-item:hover { background: var(--card2); }
+
+  .task-cb {
+    width: 15px; height: 15px;
+    border: 1.5px solid var(--accent);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+    background: var(--bg);
+  }
+  .task-item.checked .task-cb {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .task-cb svg { display: none; }
+  .task-item.checked .task-cb svg { display: block; }
+
+  .task-text-wrap { flex: 1; min-width: 0; }
+  .task-main {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    transition: color .15s;
+  }
+  .task-item.checked .task-main {
+    color: var(--grey-m);
+    text-decoration: line-through;
+    text-decoration-color: var(--grey-m);
+  }
+  .task-detail {
+    font-size: 10.5px;
+    color: var(--grey-l);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.4;
+    margin-top: 2px;
+    word-break: break-word;
+  }
+  .task-item.checked .task-detail { color: var(--grey-m); }
+
+  /* Day progress mini bar */
+  .day-footer {
+    padding: 8px 14px 10px;
+    border-top: 1px solid var(--grey-d);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .day-mini-bar-bg { flex: 1; background: var(--grey-d); border-radius: 3px; height: 3px; }
+  .day-mini-bar { height: 3px; border-radius: 3px; background: var(--accent); transition: width .3s; }
+  .day-mini-pct { font-size: 10px; color: var(--grey-m); font-weight: 600; white-space: nowrap; }
+
+  /* Rest day style */
+  .rest-body { padding: 14px; }
+  .rest-body p { font-size: 12px; color: var(--grey-l); margin-bottom: 8px; }
+  .rest-tips { display: flex; flex-direction: column; gap: 5px; }
+  .rest-tip {
+    display: flex; gap: 8px; align-items: flex-start;
+    font-size: 11.5px; color: var(--grey-l);
+    padding: 5px 8px;
+    background: var(--card2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .rest-tip:hover { background: var(--card3); }
+  .rest-tip-cb {
+    width: 13px; height: 13px;
+    border: 1.5px solid var(--rest);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg);
+    transition: all .15s;
+  }
+  .rest-tip.checked .rest-tip-cb { background: var(--rest); }
+  .rest-tip.checked .rest-tip-cb svg { display: block; }
+  .rest-tip-cb svg { display: none; }
+  .rest-tip.checked span { color: var(--grey-m); text-decoration: line-through; }
+
+  /* ── FLOATING PROGRESS ─────────────────────── */
+  .float-prog {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--card);
+    border: 1px solid var(--w1);
+    border-radius: 16px;
+    padding: 14px 18px;
+    min-width: 160px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    z-index: 200;
+  }
+  .float-prog-label { font-size: 10px; font-weight: 700; color: var(--grey-l); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+  .float-prog-num { font-size: 28px; font-weight: 900; color: var(--w1); line-height: 1; }
+  .float-prog-sub { font-size: 10px; color: var(--grey-m); margin-top: 2px; margin-bottom: 8px; }
+  .float-bar-bg { background: var(--grey-d); border-radius: 4px; height: 5px; }
+  .float-bar { height: 5px; border-radius: 4px; background: var(--w1); transition: width .4s; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--grey-d); border-radius: 3px; }
+
+  @media (max-width: 768px) {
+    .overview { grid-template-columns: 1fr 1fr; }
+    .days-grid { grid-template-columns: 1fr; }
+    .float-prog { bottom: 12px; right: 12px; padding: 10px 14px; min-width: 130px; }
+    .container { padding: 20px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>Month 1 · Big Data Roadmap</h1>
+    <span>Ajay Sunny Deekonda · Data Engineering Transition</span>
+  </div>
+  <div class="header-right">
+    <div class="overall-badge">Total: <span id="hdr-total">0</span> / <span id="hdr-max">0</span> tasks</div>
+    <button class="reset-btn" onclick="resetAll()">Reset All</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Overview -->
+  <div class="overview" id="overview-cards"></div>
+
+  <!-- Cert strip -->
+  <div class="cert-strip">
+    <div class="cert-star">★</div>
+    <div class="cert-text">
+      <strong>Target Cert 1:</strong> Databricks Certified Associate Developer for Apache Spark — aim for end of Month 2 &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Target Cert 2:</strong> AWS Certified Data Engineer – Associate — aim for end of Month 3
+    </div>
+  </div>
+
+  <!-- Weeks -->
+  <div id="weeks-container"></div>
+</div>
+
+<!-- Floating progress -->
+<div class="float-prog" id="float-prog">
+  <div class="float-prog-label">Overall Progress</div>
+  <div class="float-prog-num" id="fp-pct">0%</div>
+  <div class="float-prog-sub" id="fp-sub">0 tasks done</div>
+  <div class="float-bar-bg"><div class="float-bar" id="fp-bar" style="width:0%"></div></div>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const WEEKS = [
+  {
+    label:"WEEK 1", theme:"Python for Data + PySpark Foundations", accent:"--w1",
+    days:[
+      { day:1, hrs:"4 hrs", title:"Dev Environment Setup",
+        focus:"Get everything installed and running before touching data.",
+        tasks:[
+          ["Install Python 3.10+, Java 11, PySpark via pip","python --version && pyspark --version in terminal"],
+          ["Set up VS Code with Python & Jupyter extensions","Install: ms-python.python, ms-toolsai.jupyter"],
+          ["Create virtual environment & first Jupyter notebook","python -m venv spark_env && pip install pyspark findspark"],
+          ["Run Hello World PySpark script","sc = SparkContext(); print(sc.version) — fix until it works"],
+          ["Revise Python: list comprehensions","[x**2 for x in range(10) if x%2==0] — practice 5 variations"],
+          ["Revise Python: lambda, map, filter, reduce","sorted(data, key=lambda x: x['age']) — write 5 examples"],
+          ["Write notes on what Spark is and why it exists","Your own words — 'Spark solves X which Hadoop couldn't because...'"],
+        ]
+      },
+      { day:2, hrs:"3 hrs", title:"Python for Data with Pandas",
+        focus:"Build data intuition you'll reuse daily in PySpark.",
+        tasks:[
+          ["Load a CSV into Pandas DataFrame","pd.read_csv('data.csv') — use Titanic or Iris from Kaggle"],
+          ["Explore data: shape, dtypes, describe, isnull","df.describe() — understand what each stat tells you"],
+          ["Filter rows and select columns","df[df['age'] > 25][['name','salary']] — practice 6 filter combos"],
+          ["GroupBy and aggregation","df.groupby('dept')['salary'].agg(['mean','max','count'])"],
+          ["Sort, rename columns, drop nulls","df.sort_values('salary', ascending=False).dropna().rename(...)"],
+          ["Write cleaned data back to CSV","df.to_csv('cleaned.csv', index=False) — verify with pd.read_csv"],
+        ]
+      },
+      { day:3, hrs:"3 hrs", title:"PySpark Concepts & Architecture",
+        focus:"Understand the 'why' before the 'how' — saves hours of confusion later.",
+        tasks:[
+          ["Read Learning Spark Ch.1: Intro to Apache Spark","Focus: why Spark replaced MapReduce, in-memory processing"],
+          ["Read Learning Spark Ch.2: Downloading Spark","Understand driver vs executor, cluster manager roles"],
+          ["Diagram the Spark architecture yourself","Draw: Client → Driver → Cluster Manager → Executors → Tasks"],
+          ["Understand RDD vs DataFrame vs Dataset","RDD=low level, DF=optimized, DS=type-safe — know trade-offs"],
+          ["Study Catalyst Optimizer — what it does","Logical → Optimized → Physical plan → RDD execution"],
+          ["Watch 1 Spark internals video (20-30 min)","Search: 'Apache Spark architecture explained 2024'"],
+          ["Write a cheat sheet in your own words","This becomes your interview revision card"],
+        ]
+      },
+      { day:4, hrs:"4 hrs", title:"PySpark DataFrames Deep Dive",
+        focus:"DataFrames are your primary tool. Get very comfortable here.",
+        tasks:[
+          ["Create DataFrame from Python list & dictionary","spark.createDataFrame(data, schema=['col1','col2'])"],
+          ["Read CSV with options: header, inferSchema, sep","spark.read.option('header',True).csv('path')"],
+          ["Read JSON (single-line and multi-line)","spark.read.option('multiLine',True).json('path')"],
+          ["select(), filter()/where(), show(), count()","df.select('name','age').filter(col('age')>25).show()"],
+          ["withColumn() to add/transform columns","df.withColumn('salary_k', col('salary')/1000)"],
+          ["drop(), distinct(), limit(), sample()","Master these — used constantly in data cleaning pipelines"],
+          ["Write DataFrame to CSV and JSON","df.write.mode('overwrite').csv('output/') — inspect files"],
+        ]
+      },
+      { day:5, hrs:"3 hrs", title:"Lazy Evaluation & Transformations vs Actions",
+        focus:"This concept comes up in every Spark interview. Understand it cold.",
+        tasks:[
+          ["Read: what lazy evaluation means in Spark","Transformations only execute when an Action is called"],
+          ["List all transformations: narrow vs wide","Narrow: map,filter,select. Wide: groupBy,join,distinct"],
+          ["List all actions: collect, show, count, save","Actions trigger DAG execution — understand the cost of each"],
+          ["Run explain() on a DataFrame query","df.filter(...).groupBy(...).explain(True) — read the plan"],
+          ["Observe DAG in Spark UI","localhost:4040 → Jobs → Stages → Tasks — screenshot and study"],
+          ["Practice: write 5 transformation chains without actions","Then add action at end and see when execution happens"],
+          ["Write Q&A on lazy evaluation in notes","'Why is lazy eval useful?' — Answer in 3 sentences"],
+        ]
+      },
+      { day:6, hrs:"3 hrs", title:"PySpark Aggregations & First Script",
+        focus:"Build your first real analysis script today — push it to GitHub.",
+        tasks:[
+          ["groupBy() with single and multiple columns","df.groupBy('dept','city').agg(count('id'),avg('salary'))"],
+          ["agg() with multiple functions simultaneously","from pyspark.sql.functions import count,avg,max,min,sum"],
+          ["orderBy() and sort() on aggregated results","df.groupBy('dept').agg(avg('salary')).orderBy(desc('avg(salary)'))"],
+          ["Filter after aggregation (HAVING equivalent)","Use .filter() after .agg() — equivalent of SQL HAVING"],
+          ["Download: NYC Taxi dataset (Jan 2023 sample)","data.cityofnewyork.us — 500k+ rows is ideal"],
+          ["Build script: trips by hour, avg fare by borough","Full: read → clean → agg → sort → show → write CSV"],
+          ["Push to GitHub: create repo 'spark-learning'","Add README: 'Day 6 — first Spark aggregation script'"],
+        ]
+      },
+      { day:7, hrs:"REST", title:"Review & Consolidate Week 1",
+        focus:"Rest is part of learning. Consolidate, don't grind.",
+        tasks:[
+          ["Re-read all notes from Days 1–6","Highlight anything you can't explain simply"],
+          ["Re-run Day 6 script from memory — no copy-paste","If you get stuck, that's your weak area"],
+          ["List 5 things you'd struggle to explain in interview","Write them down — address next week"],
+          ["Watch: 'PySpark tutorial for beginners' YouTube","Something 30–45 min — reinforces concepts visually"],
+          ["Clean up GitHub repo: .gitignore, folder structure","data/ src/ notebooks/ README.md"],
+        ]
+      },
+    ]
+  },
+  {
+    label:"WEEK 2", theme:"PySpark Intermediate + Advanced SQL", accent:"--w2",
+    days:[
+      { day:8, hrs:"4 hrs", title:"PySpark Joins — All Types",
+        focus:"Joins are the most tested topic in Data Engineering interviews.",
+        tasks:[
+          ["Create two DataFrames: orders + customers","orders: order_id,cust_id,amount. customers: cust_id,name,city"],
+          ["Inner join — only matching rows","orders.join(customers, 'cust_id', 'inner')"],
+          ["Left join — all from left, matching from right","Watch for nulls on right side — how do you handle them?"],
+          ["Right join, full outer join, cross join","Cross join: every row × every row — use only with small DFs"],
+          ["Left anti join — rows in left NOT in right","This is your data quality check join — find unmatched records"],
+          ["Broadcast join — when and why to use it","from pyspark.sql.functions import broadcast; join(broadcast(small_df))"],
+          ["Run explain() on each join — compare physical plans","Inner vs broadcast: see the difference in stages and shuffles"],
+          ["Practice: find customers with no orders (anti join)","Real use case — interviewers love this pattern"],
+        ]
+      },
+      { day:9, hrs:"3 hrs", title:"PySpark SQL Interface",
+        focus:"Spark SQL bridges your existing SQL skills into Spark.",
+        tasks:[
+          ["Register DataFrame as temp view","df.createOrReplaceTempView('orders') — understand scope"],
+          ["Run SQL: SELECT with WHERE, GROUP BY, ORDER BY","spark.sql('SELECT city, COUNT(*) as cnt FROM orders GROUP BY city')"],
+          ["Run SQL: JOINs between two temp views","Register both DFs, then JOIN in SQL — compare to DF API result"],
+          ["Mix SQL and DataFrame API in same pipeline","sql_result = spark.sql('...'); sql_result.filter(...).show()"],
+          ["Create global temp views vs session views","Global: visible across sessions. Session: this SparkSession only"],
+          ["Cache a view and see performance impact","spark.catalog.cacheTable('orders') → re-run query → compare time"],
+          ["Write same query 3 ways: SQL, DF API, mixed","Pick the style most readable — understand tradeoffs"],
+        ]
+      },
+      { day:10, hrs:"4 hrs", title:"SQL Window Functions — Interview Critical",
+        focus:"Window functions appear in almost every Data Engineering interview.",
+        tasks:[
+          ["Understand Window spec: PARTITION BY + ORDER BY","from pyspark.sql.window import Window; w=Window.partitionBy('dept').orderBy('salary')"],
+          ["ROW_NUMBER() — unique sequential rank per partition","Find: 1st employee hired in each department"],
+          ["RANK() and DENSE_RANK() — understand difference","RANK skips on ties. DENSE_RANK does not — know when each fits"],
+          ["LAG() — access previous row's value","df.withColumn('prev_sale', lag('sales',1).over(w))"],
+          ["LEAD() — access next row's value","Useful for session analysis, next-event prediction patterns"],
+          ["SUM() OVER, AVG() OVER — running totals","sum('amount').over(w.rowsBetween(Window.unboundedPreceding,0))"],
+          ["LeetCode 185: Department Top 3 Salaries","Classic window problem — solve with DENSE_RANK in PySpark"],
+          ["StrataScratch: solve 4 window function problems","Filter by 'window functions', pick Medium level"],
+        ]
+      },
+      { day:11, hrs:"3 hrs", title:"Advanced SQL — CTEs & Optimization",
+        focus:"Write SQL that other engineers admire, not just SQL that works.",
+        tasks:[
+          ["CTEs: WITH clause for readable reusable subqueries","WITH monthly AS (SELECT...) SELECT * FROM monthly WHERE..."],
+          ["Nested CTEs — chaining multiple WITH blocks","WITH a AS (...), b AS (...), c AS (...) SELECT * FROM c"],
+          ["Subqueries: WHERE IN, WHERE EXISTS, correlated","EXISTS is often faster than IN for large datasets — understand why"],
+          ["Query optimization: avoid SELECT *, use column pruning","Select only columns you need — reduces shuffle data"],
+          ["EXPLAIN ANALYZE a slow query, identify bottleneck","EXPLAIN SELECT... — read scan vs index usage"],
+          ["Solve 5 medium-hard SQL problems on LeetCode","Tag: SQL, Difficulty: Medium. Focus on aggregations + subqueries"],
+        ]
+      },
+      { day:12, hrs:"4 hrs", title:"Schema Management & Data Quality",
+        focus:"Production pipelines fail on schema drift. Learn to defend against it.",
+        tasks:[
+          ["Define schema explicitly with StructType","from pyspark.sql.types import StructType,StructField,StringType,IntegerType"],
+          ["Understand why inferSchema is dangerous in production","inferSchema reads data twice and can guess wrong on edge cases"],
+          ["Cast column types: IntegerType, DoubleType, TimestampType","df.withColumn('age', col('age').cast(IntegerType()))"],
+          ["Handle nulls: dropna, fillna, replace strategy","fillna({'salary':0, 'city':'Unknown'}) — decide per column"],
+          ["Validate data: check ranges, allowed values","df.filter(col('age')<0).count() — any negatives = data issue"],
+          ["Handle malformed records: PERMISSIVE vs DROPMALFORMED","spark.read.option('mode','PERMISSIVE').option('columnNameOfCorruptRecord','_corrupt')"],
+          ["Write schema to JSON for documentation","schema.json() — save for other engineers to reference"],
+          ["Build a schema validation function: returns pass/fail","def validate(df, expected_schema): compare fields + types"],
+        ]
+      },
+      { day:13, hrs:"3 hrs", title:"Read/Write Formats: Parquet, ORC, Delta",
+        focus:"Understand why columnar storage is foundational to Big Data performance.",
+        tasks:[
+          ["Write DataFrame as CSV, JSON, Parquet, ORC","Compare file sizes — Parquet will be 5-10x smaller than CSV"],
+          ["Read each format back and verify row counts","Confirm: no data lost in write/read round-trip"],
+          ["Understand why Parquet is columnar and why it matters","Columnar = read only columns you need = less I/O = faster"],
+          ["Parquet compression codecs: snappy vs gzip vs lz4","Snappy: fast. Gzip: smaller files. LZ4: fastest decompress"],
+          ["Partition on write: write.partitionBy('year','month')","df.write.partitionBy('year','month').parquet('output/')"],
+          ["Read specific partition with partition pruning","filter(col('year')==2024) — check explain() to confirm pruning"],
+          ["Save to ORC and compare with Parquet","ORC is preferred in Hive ecosystems — know both"],
+        ]
+      },
+      { day:14, hrs:"REST", title:"Review & Fix Week 2",
+        focus:"Joins + Window Functions are interview gold. Don't rush past them.",
+        tasks:[
+          ["Re-solve the window function LeetCode problems without hints","If you can't, add to your 'weak list'"],
+          ["Re-write Day 8 joins script from scratch","All 5 join types — time yourself, aim for under 10 minutes"],
+          ["Read back all notes from Days 8–13","Summarize each day in 2 lines in a master notes file"],
+          ["Upload Week 2 scripts to GitHub","Folder: src/week2/ — clean filenames like joins.py, window_fns.py"],
+          ["Write 5 interview Q you'd now be able to answer","E.g. 'Difference between RANK and DENSE_RANK with example'"],
+        ]
+      },
+    ]
+  },
+  {
+    label:"WEEK 3", theme:"PySpark Advanced + Delta Lake Deep Dive", accent:"--w3",
+    days:[
+      { day:15, hrs:"4 hrs", title:"Partitioning, Repartition & Coalesce",
+        focus:"Directly affects performance at scale. One of the most asked advanced topics.",
+        tasks:[
+          ["Understand default parallelism: spark.sparkContext.defaultParallelism","Check your local machine — in cluster = total executor cores"],
+          ["repartition(n) — shuffles data, increases or decreases partitions","df.repartition(8) → forces full shuffle, evenly distributed"],
+          ["coalesce(n) — reduces partitions, avoids full shuffle","df.coalesce(2) → merges partitions, more efficient for reduction"],
+          ["Decision rule: repartition vs coalesce","Increasing? Use repartition. Decreasing? Use coalesce."],
+          ["repartition by column: repartition('city')","All rows for same city → same partition — better for joins"],
+          ["Check partition count: df.rdd.getNumPartitions()","Before and after each operation — build intuition on data movement"],
+          ["Benchmark: read 1M row CSV → repartition(1) vs repartition(8)","Write Parquet both times — compare times and output file sizes"],
+          ["Write notes: 'When would you repartition a DataFrame?'","Interview question — answer with a real scenario"],
+        ]
+      },
+      { day:16, hrs:"3 hrs", title:"UDFs — Custom Transformations",
+        focus:"UDFs are powerful but have perf costs. Know when NOT to use them.",
+        tasks:[
+          ["Write basic Python UDF: clean phone number strings","udf(lambda x: re.sub(r'[^0-9]','',x) if x else None, StringType())"],
+          ["Register UDF and apply with withColumn()","df.withColumn('clean_ph', clean_phone_udf('phone'))"],
+          ["Use UDF in Spark SQL via spark.udf.register()","spark.udf.register('clean_phone', clean_fn, StringType())"],
+          ["Understand why UDFs are slow: serialization overhead","Python UDF = data leaves JVM → Python → back to JVM per row"],
+          ["Find built-in PySpark alternative to your UDF","regexp_replace, when/otherwise, coalesce — check functions first"],
+          ["Benchmark: UDF vs built-in function on 500k rows","UDFs typically 2-10x slower — measure it, remember the number"],
+          ["Pandas UDF (vectorized UDF) — brief intro","from pyspark.sql.functions import pandas_udf — operates on Series"],
+        ]
+      },
+      { day:17, hrs:"4 hrs", title:"Delta Lake — Intro & ACID Transactions",
+        focus:"You have Delta Lake on your resume. Today you go deep enough to own it.",
+        tasks:[
+          ["Install delta-spark matching your PySpark version","pip install delta-spark — check delta.io/docs for version matrix"],
+          ["Configure SparkSession for Delta Lake",".config('spark.sql.extensions','io.delta.sql.DeltaSparkSessionExtension')"],
+          ["Understand why Delta Lake was created: the lake problems","No ACID, no schema enforcement, no versioning — Delta solves all three"],
+          ["Write first Delta table from a DataFrame","df.write.format('delta').save('/delta/orders') — inspect _delta_log/"],
+          ["Understand the transaction log: what _delta_log contains","JSON files recording every change — this IS the ACID guarantee"],
+          ["Insert new rows into existing Delta table (append)",".write.format('delta').mode('append').save('/delta/orders')"],
+          ["Overwrite Delta table and check transaction log grows","mode('overwrite') → new JSON in _delta_log — note version number"],
+          ["Read Delta table and verify all rows present","spark.read.format('delta').load('/delta/orders').count()"],
+        ]
+      },
+      { day:18, hrs:"3 hrs", title:"Delta Lake — Updates, Deletes & Time Travel",
+        focus:"Time travel is a killer feature. This is your differentiator in interviews.",
+        tasks:[
+          ["UPDATE rows in Delta table using DeltaTable API","from delta.tables import DeltaTable; dt.update(condition, {'col':'value'})"],
+          ["DELETE rows matching a condition","dt.delete(col('status')=='cancelled') — check row count before/after"],
+          ["MERGE (upsert): insert if new, update if exists","dt.merge(source,'target.id=source.id').whenMatchedUpdate().whenNotMatchedInsert().execute()"],
+          ["DESCRIBE HISTORY to see all table versions","deltaTable.history().show() — see version, timestamp, operation"],
+          ["Time travel: read specific version","spark.read.format('delta').option('versionAsOf',2).load('/delta/orders')"],
+          ["Time travel: read as of timestamp","spark.read.format('delta').option('timestampAsOf','2024-01-15').load(...)"],
+          ["VACUUM: clean up old files (run with dry_run=True)","dt.vacuum(168) — removes files older than 7 days"],
+        ]
+      },
+      { day:19, hrs:"4 hrs", title:"Spark Performance Tuning",
+        focus:"Senior engineers are hired for this skill. Build real intuition now.",
+        tasks:[
+          ["Enable Spark UI: localhost:4040 while job runs","Jobs → Stages → Tasks → Storage — spend 30 min navigating"],
+          ["Understand shuffle: what causes it, why it's expensive","groupBy, join, distinct, repartition all cause shuffle — data moves across network"],
+          ["Cache a DataFrame: df.cache() vs df.persist()","cache()=MEMORY_ONLY. persist(MEMORY_AND_DISK) for larger data"],
+          ["Benchmark: same query with and without caching","First run populates cache, second reads from it — compare times"],
+          ["Avoid data skew: salting technique for skewed joins","Add random salt: concat(key, floor(rand()*10)) then join on salted key"],
+          ["Predicate pushdown: filter before join, not after","filter early → less data processed → less shuffle → faster"],
+          ["Tune spark.sql.shuffle.partitions (default=200)","For local: set to 8-16. In cluster: 2-3x total cores"],
+          ["AQE (Adaptive Query Execution): what it does","spark.sql.adaptive.enabled=true — Spark auto-tunes partitions at runtime"],
+        ]
+      },
+      { day:20, hrs:"3 hrs", title:"Structured Streaming — Intro",
+        focus:"Connects directly to your Kafka experience at RightData.",
+        tasks:[
+          ["Understand micro-batch vs continuous streaming in Spark","Micro-batch: process every N seconds. Continuous: per row (experimental)"],
+          ["Create streaming DataFrame from file source","spark.readStream.schema(schema).csv('streaming_input/')"],
+          ["Apply transformations to streaming DF (same API as batch)","streamDF.filter(...).groupBy(...) — note: some ops need watermark"],
+          ["Output to console sink to verify processing",".writeStream.outputMode('append').format('console').start()"],
+          ["Understand output modes: append, update, complete","append=new rows. update=changed rows. complete=full result each time"],
+          ["Add watermark to handle late-arriving data","df.withWatermark('timestamp','10 minutes')"],
+          ["Connect to your Kafka work at RightData","Write notes: 'How would I replace our Kafka consumer with Spark Streaming?'"],
+        ]
+      },
+      { day:21, hrs:"REST", title:"Review Week 3 + Project Planning",
+        focus:"Week 3 was the hardest. Consolidate before the project sprint.",
+        tasks:[
+          ["Re-run Delta Lake MERGE exercise from Day 18","If you can't reproduce it, you don't own it yet"],
+          ["Re-read Spark UI screenshots — understand each section","Can you explain: what causes a stage boundary? What is a task?"],
+          ["Finalize project dataset choice for Week 4","Pick now: NYC Taxi, Airbnb, E-commerce — 500k+ rows"],
+          ["Sketch pipeline architecture on paper","Raw CSV → Bronze Delta → Silver Delta → Gold Parquet → README"],
+          ["Update GitHub: push all Week 3 scripts","Folder: src/week3/ with clear filenames"],
+        ]
+      },
+    ]
+  },
+  {
+    label:"WEEK 4", theme:"End-to-End Project + Cert Prep", accent:"--w4",
+    days:[
+      { day:22, hrs:"4 hrs", title:"Project Architecture & Bronze Layer",
+        focus:"Own this project 100%. You'll explain every line in interviews.",
+        tasks:[
+          ["Download chosen dataset — ensure 500k+ rows","NYC Taxi Jan 2024: data.cityofnewyork.us — ~3M rows is perfect"],
+          ["Write architecture doc: what question does this pipeline answer?","E.g. 'Which pickup zones generate highest revenue on weekday mornings?'"],
+          ["Define schema explicitly — no inferSchema","StructType with all columns — document each field's business meaning"],
+          ["Build ingestion function: read raw CSV with schema","read_raw(spark, path, schema) → returns DF with validation report"],
+          ["Handle bad records: log them, don't silently drop","Write bad records to bad_records/ path for audit"],
+          ["Apply basic type casting and null handling","timestamp strings → TimestampType, fare amounts → DoubleType"],
+          ["Write Bronze Delta table: mode='append', partitionBy date","df.write.format('delta').partitionBy('pickup_date').mode('append').save(bronze_path)"],
+          ["Verify: read Bronze back, count rows, show sample","Assert: row count matches source. Log mismatches."],
+        ]
+      },
+      { day:23, hrs:"4 hrs", title:"Silver Layer — Cleaning & Enrichment",
+        focus:"Silver is where data becomes usable. Quality checks matter here.",
+        tasks:[
+          ["Read from Bronze Delta table","spark.read.format('delta').load(bronze_path)"],
+          ["Filter invalid rows: negative fares, zero distances, future timestamps","Document each rule: why is it invalid? Add to README"],
+          ["Deduplicate: identify and remove exact duplicates","df.dropDuplicates(['trip_id']) — log duplicate count"],
+          ["Derive new columns: trip_duration_minutes, fare_per_mile","(unix_timestamp('dropoff')-unix_timestamp('pickup'))/60"],
+          ["Add pickup hour, day_of_week, is_weekend columns","from pyspark.sql.functions import hour, dayofweek"],
+          ["Apply window function: rank trips by fare within each zone","Window.partitionBy('zone').orderBy(desc('fare'))"],
+          ["Write Silver Delta table with schema evolution enabled",".option('mergeSchema','true') — future-proof for schema changes"],
+          ["Write data quality report: null counts, range stats","df.describe().show() + null count per column — save to CSV"],
+        ]
+      },
+      { day:24, hrs:"4 hrs", title:"Gold Layer — Business Analytics",
+        focus:"Gold is what stakeholders actually use. Make it clean and fast.",
+        tasks:[
+          ["Read Silver Delta table","Always read from Silver — never skip layers"],
+          ["Aggregate: revenue by pickup zone by hour of day","groupBy('zone','pickup_hour').agg(sum('fare'),count('trip_id'),avg('fare'))"],
+          ["Aggregate: top 10 zones by weekday morning revenue","filter(col('is_weekend')==False).filter(col('pickup_hour').between(7,10))"],
+          ["Aggregate: revenue trend by date (daily totals)","groupBy('pickup_date').agg(sum('fare').alias('daily_revenue')).orderBy('pickup_date')"],
+          ["Aggregate: average trip duration by zone pair","groupBy('pickup_zone','dropoff_zone').agg(avg('duration'))"],
+          ["Write Gold as Parquet (optimized for BI tools)","partitionBy('pickup_date') — columnar reads will be very fast"],
+          ["Optimize Delta tables: OPTIMIZE command","spark.sql('OPTIMIZE delta.`path`') — compacts small files"],
+          ["Read Gold, run final summary report to console","Print: total trips, total revenue, avg fare, top zone"],
+        ]
+      },
+      { day:25, hrs:"3 hrs", title:"Pipeline Orchestration & Code Quality",
+        focus:"Professional code tells a story. Make yours readable by a stranger.",
+        tasks:[
+          ["Restructure project into proper modules","src/ingest.py, src/transform.py, src/aggregate.py, main.py"],
+          ["Write main.py that runs the full pipeline end-to-end","python main.py → bronze → silver → gold → report. One command."],
+          ["Add logging: log row counts at each stage","import logging — log INFO: 'Bronze loaded: 2.8M rows'"],
+          ["Add configuration file: config.py or config.yaml","input_path, bronze_path, silver_path, gold_path — no hardcoded strings"],
+          ["Add basic unit tests for transformation functions","test_clean_data(), test_derive_cols() using small test DF"],
+          ["Write docstrings for every function","'''Reads raw CSV, applies schema, returns DF. Raises: ValueError if mismatch'''"],
+        ]
+      },
+      { day:26, hrs:"4 hrs", title:"GitHub Portfolio & Documentation",
+        focus:"Your GitHub is your resume's proof. Make this impossible to dismiss.",
+        tasks:[
+          ["Write comprehensive README.md","Sections: Overview, Architecture, Tech Stack, How to Run, Sample Output"],
+          ["Add architecture diagram to README","Use draw.io or Excalidraw — Bronze/Silver/Gold medallion diagram"],
+          ["Add sample output screenshots to README","Show: top 10 zones table, daily revenue trend"],
+          ["Write DECISIONS.md: why each technical choice","'I chose Delta Lake over Parquet because... I partitioned by date because...'"],
+          ["Tag the GitHub release as v1.0","git tag v1.0 && git push --tags — marks project completion"],
+          ["Update LinkedIn: add project in Experience section","'Built end-to-end PySpark pipeline processing 2.8M NYC taxi records using Delta Lake'"],
+          ["Update resume with project and Delta Lake skills","'Built medallion architecture pipeline (Bronze/Silver/Gold) using PySpark + Delta Lake'"],
+        ]
+      },
+      { day:27, hrs:"3 hrs", title:"Databricks Cert Prep — Exam Strategy",
+        focus:"Databricks Associate Spark cert is the most recognized Spark credential.",
+        tasks:[
+          ["Download official exam guide from databricks.com","Note the 6 domain areas and their weightings"],
+          ["Domain 1: Spark Architecture (17%) — your strongest area","Review: Driver, Executors, DAG, Catalyst — you know this well"],
+          ["Domain 2: Spark DataFrame API (30%) — primary study area","Review: transformations, actions, joins, aggregations"],
+          ["Domain 3: Delta Lake (24%) — your differentiator","Review Days 17–18 notes — you've done most of this already"],
+          ["Take a free practice test online","Search 'Databricks Spark Associate practice exam' — assess baseline"],
+          ["List domains where you scored under 70%","These are your Month 2 Week 1 focus areas"],
+          ["Buy exam voucher — target exam in 5-6 weeks","Booking creates real deadline pressure — don't skip this"],
+        ]
+      },
+      { day:28, hrs:"3 hrs", title:"Month 1 Full Review & Month 2 Planning",
+        focus:"This is your performance review with yourself. Be brutally honest.",
+        tasks:[
+          ["Can you explain lazy evaluation with an example? (60 sec)","Time yourself. If you stumble, it's still on your weak list."],
+          ["Can you write joins + window function script from scratch?","Open blank file. Write it. No Google. 15 minutes max."],
+          ["Can you explain Delta Lake time travel simply?","'Think of it like Google Docs version history, but for massive datasets'"],
+          ["List 10 interview questions you'd answer confidently","Write with answers — this is your interview prep bank"],
+          ["List 5 questions you'd still struggle with","These are your Month 2 priorities: Airflow, AWS, cloud storage"],
+          ["Plan Month 2 Week 1: Airflow setup + first DAG","Next: pip install apache-airflow, set up local environment"],
+          ["Celebrate: you've done Month 1. Share your GitHub.","Tell someone. This is real progress."],
+        ]
+      },
+    ]
+  }
+];
+
+const STORAGE_KEY = 'ajay_month1_progress';
+const WEEK_THEMES = { '--w1':'#7C6FFF', '--w2':'#00D4AA', '--w3':'#FF6B8A', '--w4':'#FF9F43' };
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+let state = loadState();
+
+function getKey(dayNum, taskIdx) { return `d${dayNum}_t${taskIdx}`; }
+function isChecked(dayNum, taskIdx) { return !!state[getKey(dayNum, taskIdx)]; }
+function toggle(dayNum, taskIdx) {
+  const k = getKey(dayNum, taskIdx);
+  state[k] = !state[k];
+  saveState(state);
+  updateAll();
+}
+
+// ─── STATS ────────────────────────────────────────────────────────────────────
+function calcStats() {
+  let total = 0, done = 0;
+  const byWeek = WEEKS.map(w => {
+    let wt = 0, wd = 0;
+    w.days.forEach(d => {
+      d.tasks.forEach((t, ti) => {
+        wt++; total++;
+        if (isChecked(d.day, ti)) { wd++; done++; }
+      });
+    });
+    return { total: wt, done: wd };
+  });
+  return { total, done, byWeek };
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────────
+function buildUI() {
+  buildOverview();
+  buildWeeks();
+}
+
+function buildOverview() {
+  const container = document.getElementById('overview-cards');
+  container.innerHTML = WEEKS.map((w, wi) => {
+    const accent = w.accent;
+    return `<div class="ov-card" style="--accent:var(${accent})" id="ov-${wi}">
+      <div class="ov-label">Month 1</div>
+      <div class="ov-week-name">${w.label}</div>
+      <div class="ov-theme">${w.theme}</div>
+      <div class="ov-bar-bg"><div class="ov-bar" id="ov-bar-${wi}" style="width:0%"></div></div>
+      <div class="ov-pct" id="ov-pct-${wi}">0% complete</div>
+    </div>`;
+  }).join('');
+}
+
+function buildWeeks() {
+  const container = document.getElementById('weeks-container');
+  container.innerHTML = WEEKS.map((w, wi) => {
+    const accent = `var(${w.accent})`;
+    const daysHTML = w.days.map(d => buildDayCard(d, w.accent)).join('');
+    return `
+    <section class="week-section" style="--accent:${accent}">
+      <div class="week-header">
+        <div class="week-pill" style="background:${accent}">${w.label}</div>
+        <div class="week-title">${w.theme}</div>
+        <div class="week-progress-text" id="wprog-${wi}"><span>0</span> / 0 tasks</div>
+      </div>
+      <div class="days-grid">${daysHTML}</div>
+    </section>`;
+  }).join('');
+
+  // Add click events
+  document.querySelectorAll('.task-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const day = parseInt(el.dataset.day);
+      const idx = parseInt(el.dataset.idx);
+      toggle(day, idx);
+    });
+  });
+  document.querySelectorAll('.rest-tip').forEach(el => {
+    el.addEventListener('click', () => {
+      const day = parseInt(el.dataset.day);
+      const idx = parseInt(el.dataset.idx);
+      toggle(day, idx);
+    });
+  });
+}
+
+function buildDayCard(d, accent) {
+  const isRest = d.hrs === 'REST';
+  const hrsColor = d.hrs === '4 hrs' ? 'var(--h4)' : d.hrs === '3 hrs' ? 'var(--h3)' : 'var(--rest)';
+
+  if (isRest) {
+    const tipsHTML = d.tasks.map((t, ti) => `
+      <div class="rest-tip" data-day="${d.day}" data-idx="${ti}" id="rt-${d.day}-${ti}">
+        <div class="rest-tip-cb">
+          <svg width="8" height="8" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span>${t[0]}</span>
+      </div>`).join('');
+    return `<div class="day-card rest-card" id="card-${d.day}">
+      <div class="day-card-top">
+        <span class="day-num">DAY ${d.day} · REST</span>
+      </div>
+      <div class="rest-body">
+        <p style="font-weight:700;font-size:13px;margin-bottom:4px;">${d.title}</p>
+        <p style="font-style:italic;font-size:11px;margin-bottom:10px;">${d.focus}</p>
+        <div class="rest-tips">${tipsHTML}</div>
+      </div>
+    </div>`;
+  }
+
+  const tasksHTML = d.tasks.map((t, ti) => `
+    <div class="task-item" data-day="${d.day}" data-idx="${ti}" id="task-${d.day}-${ti}">
+      <div class="task-cb">
+        <svg width="9" height="9" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="task-text-wrap">
+        <div class="task-main">${t[0]}</div>
+        <div class="task-detail">${t[1]}</div>
+      </div>
+    </div>`).join('');
+
+  return `<div class="day-card" id="card-${d.day}">
+    <div class="day-card-top" style="background:var(${accent})">
+      <span class="day-num">DAY ${d.day}</span>
+      <span class="day-hrs-badge" style="background:${hrsColor};color:white;">${d.hrs}</span>
+      <span class="complete-tick" id="tick-${d.day}" style="display:none">✓ Done</span>
+    </div>
+    <div class="day-card-body">
+      <div class="day-title">${d.title}</div>
+      <div class="day-focus">${d.focus}</div>
+      <div class="tasks-list">${tasksHTML}</div>
+    </div>
+    <div class="day-footer">
+      <div class="day-mini-bar-bg">
+        <div class="day-mini-bar" id="mini-bar-${d.day}" style="width:0%;background:var(${accent})"></div>
+      </div>
+      <div class="day-mini-pct" id="mini-pct-${d.day}">0%</div>
+    </div>
+  </div>`;
+}
+
+function updateAll() {
+  const stats = calcStats();
+  const totalPct = stats.total ? Math.round(stats.done / stats.total * 100) : 0;
+
+  // Float
+  document.getElementById('fp-pct').textContent = totalPct + '%';
+  document.getElementById('fp-sub').textContent = `${stats.done} tasks done`;
+  document.getElementById('fp-bar').style.width = totalPct + '%';
+
+  // Header
+  document.getElementById('hdr-total').textContent = stats.done;
+  document.getElementById('hdr-max').textContent = stats.total;
+
+  // Overview + week progress
+  WEEKS.forEach((w, wi) => {
+    const ws = stats.byWeek[wi];
+    const wpct = ws.total ? Math.round(ws.done / ws.total * 100) : 0;
+    document.getElementById(`ov-bar-${wi}`).style.width = wpct + '%';
+    document.getElementById(`ov-pct-${wi}`).textContent = `${wpct}% complete · ${ws.done}/${ws.total}`;
+    const wp = document.getElementById(`wprog-${wi}`);
+    if (wp) wp.innerHTML = `<span>${ws.done}</span> / ${ws.total} tasks`;
+  });
+
+  // Per-day
+  WEEKS.forEach(w => {
+    w.days.forEach(d => {
+      const isRest = d.hrs === 'REST';
+      let dayDone = 0;
+      d.tasks.forEach((t, ti) => {
+        const checked = isChecked(d.day, ti);
+        if (checked) dayDone++;
+
+        if (isRest) {
+          const el = document.getElementById(`rt-${d.day}-${ti}`);
+          if (el) el.classList.toggle('checked', checked);
+        } else {
+          const el = document.getElementById(`task-${d.day}-${ti}`);
+          if (el) el.classList.toggle('checked', checked);
+        }
+      });
+
+      if (!isRest) {
+        const pct = d.tasks.length ? Math.round(dayDone / d.tasks.length * 100) : 0;
+        const bar = document.getElementById(`mini-bar-${d.day}`);
+        const pctEl = document.getElementById(`mini-pct-${d.day}`);
+        const card = document.getElementById(`card-${d.day}`);
+        const tick = document.getElementById(`tick-${d.day}`);
+        if (bar) bar.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = pct + '%';
+        if (card) card.classList.toggle('complete', pct === 100);
+        if (tick) tick.style.display = pct === 100 ? 'inline' : 'none';
+      }
+    });
+  });
+}
+
+function resetAll() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    state = {};
+    saveState(state);
+    updateAll();
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+buildUI();
+updateAll();
+</script>
+</body>
+</html>
