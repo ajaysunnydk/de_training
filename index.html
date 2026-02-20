@@ -62,18 +62,35 @@
     color: var(--white);
   }
   .overall-badge span { color: var(--w1); }
-  .reset-btn {
+  .hdr-btn {
     background: transparent;
     border: 1px solid var(--grey-m);
     color: var(--grey-l);
     border-radius: 8px;
-    padding: 5px 12px;
+    padding: 5px 13px;
     font-size: 11px;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
+    font-weight: 600;
     transition: all .2s;
+    display: flex; align-items: center; gap: 5px;
   }
-  .reset-btn:hover { border-color: var(--w3); color: var(--w3); }
+  .hdr-btn:hover { border-color: var(--w2); color: var(--w2); }
+  .hdr-btn.save:hover { border-color: var(--w2); color: var(--w2); }
+  .hdr-btn.load:hover { border-color: var(--w1); color: var(--w1); }
+  .hdr-btn.reset:hover { border-color: var(--w3); color: var(--w3); }
+
+  /* Save toast */
+  .toast {
+    position: fixed; bottom: 100px; right: 24px;
+    background: var(--card); border: 1px solid var(--w2);
+    color: var(--w2); border-radius: 10px;
+    padding: 10px 18px; font-size: 12px; font-weight: 700;
+    z-index: 999; opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+    box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  }
+  .toast.show { opacity: 1; }
 
   /* ── MAIN LAYOUT ─────────────────────── */
   .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
@@ -339,7 +356,10 @@
   </div>
   <div class="header-right">
     <div class="overall-badge">Total: <span id="hdr-total">0</span> / <span id="hdr-max">0</span> tasks</div>
-    <button class="reset-btn" onclick="resetAll()">Reset All</button>
+    <button class="hdr-btn save" onclick="saveToFile()" title="Save progress to a .json file on your computer">💾 Save</button>
+    <button class="hdr-btn load" onclick="document.getElementById('file-input').click()" title="Load progress from a saved .json file">📂 Load</button>
+    <button class="hdr-btn reset" onclick="resetAll()">✕ Reset</button>
+    <input type="file" id="file-input" accept=".json" style="display:none" onchange="loadFromFile(event)">
   </div>
 </header>
 
@@ -368,6 +388,8 @@
   <div class="float-prog-sub" id="fp-sub">0 tasks done</div>
   <div class="float-bar-bg"><div class="float-bar" id="fp-bar" style="width:0%"></div></div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -731,13 +753,47 @@ const WEEKS = [
 ];
 
 const STORAGE_KEY = 'ajay_month1_progress';
-const WEEK_THEMES = { '--w1':'#7C6FFF', '--w2':'#00D4AA', '--w3':'#FF6B8A', '--w4':'#FF9F43' };
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
+// ─── PERSIST: localStorage + JSON file backup ─────────────────────────────────
 function loadState() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
 }
-function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+function saveState(s) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch {}
+}
+
+function saveToFile() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ajay_month1_progress.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('✓ Saved → ajay_month1_progress.json');
+}
+
+function loadFromFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      state = JSON.parse(e.target.result);
+      saveState(state);
+      updateAll();
+      showToast('✓ Progress loaded successfully!');
+    } catch { showToast('✗ Could not read file'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
 
 let state = loadState();
 
